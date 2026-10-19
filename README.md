@@ -9,6 +9,11 @@ puntos de experiencia, rachas e insignias. El progreso se guarda por **nombre de
 - `server/` — Node.js + Express + MySQL (ingreso por usuario, progreso, panel docente). Sirve también la web compilada.
 - Base de datos: `excel_aula` (tablas `usuarios`, `progreso`, `insignias`) en el MySQL local del equipo. Esquema: `server/scripts/schema.sql`.
 
+## Publicación (en línea)
+- **Web (alumnos):** https://aula-excel.netlify.app — Netlify, se actualiza sola con cada `git push` a `main` del repositorio `angeljrcurtido2/aula-excel`.
+- **API:** https://aula-api.sistemaprueba2026.online — el servidor de este equipo expuesto por el túnel de Cloudflare (tarea de Windows `AulaExcelServidor`, arranca con el equipo). La web la usa mediante `VITE_API_URL` (en `netlify.toml`).
+- Los alumnos solo pueden entrar si este equipo está encendido y conectado.
+
 ## Uso rápido
 - **Producción / clase:** doble clic en `iniciar_aula.bat` → http://localhost:3010 (alumnos y docente usan la misma dirección).
 - **Desarrollo:** `cd server && npm run dev` y, en otra terminal, `cd web && npm run dev` → http://localhost:5174.
