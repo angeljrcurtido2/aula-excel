@@ -71,3 +71,6 @@ button:disabled { cursor: not-allowed; }
 .xl-hojas { background: #f0f0f0; border-top: 1px solid #c8c8c8; display: flex; padding-left: 44px; }
 .xl-hojas span { padding: .25rem 1rem; font-size: .8rem; }
 .xl-hojas span.act { background: #fff; color: #217346; font-weight: 700; border-bottom: 3px solid #217346; border-left: 1px solid #ccc; border-right: 1px solid #ccc; }
+
+/* en pantallas táctiles, los marcadores de las figuras tienen una zona de toque de 44 px */
+@media (pointer: coarse) { button[aria-label^='Marca']::after { content: ''; position: absolute; inset: -9px; } }

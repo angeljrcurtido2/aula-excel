@@ -19,6 +19,18 @@ interface Ctx {
 const S = createContext<Ctx>(null as any);
 export const useSesion = () => useContext(S);
 
+// Avances que no se pudieron enviar por falta de internet: se guardan en el navegador y se reenvían solos.
+const COLA = 'aula-excel-pendientes';
+const leerCola = (): any[] => { try { return JSON.parse(localStorage.getItem(COLA) || '[]'); } catch { return []; } };
+const escribirCola = (c: any[]) => { try { localStorage.setItem(COLA, JSON.stringify(c.slice(-60))); } catch { /* sin almacenamiento */ } };
+const encolar = (p: any) => escribirCola([...leerCola().filter((x) => x.actividad !== p.actividad), p]);
+async function vaciarPendientes() {
+  const cola = leerCola(); if (!cola.length) return;
+  const resto: any[] = [];
+  for (const p of cola) { try { await api.guardar(p); } catch (e: any) { if (e?.status === 0 || e?.status >= 500) resto.push(p); } }
+  escribirCola(resto);
+}
+
 export function SesionProvider({ children }: { children: ReactNode }) {
   const [perfil, setPerfil] = useState<Perfil | null>(null);
   const [cargando, setCargando] = useState(!!getToken());
@@ -33,7 +45,10 @@ export function SesionProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!getToken()) return;
-    api.yo().then(setPerfil).catch(() => setToken(null)).finally(() => setCargando(false));
+    api.yo().then((p) => { setPerfil(p); void vaciarPendientes().then(() => api.yo().then(setPerfil).catch(() => {})); }).catch((e) => { if (e?.status !== 0) setToken(null); }).finally(() => setCargando(false));
+    const volvio = () => { void vaciarPendientes().then(() => api.yo().then(setPerfil).catch(() => {})); };
+    window.addEventListener('online', volvio);
+    return () => window.removeEventListener('online', volvio);
   }, []);
 
   const ingresar = useCallback(async (username: string, nombre?: string) => {
@@ -45,13 +60,17 @@ export function SesionProvider({ children }: { children: ReactNode }) {
   const salir = useCallback(() => { setToken(null); setPerfil(null); }, []);
 
   const guardar: Ctx['guardar'] = useCallback(async (p) => {
-    const total = CLASES.find((c) => c.n === p.clase)!.pasos.filter((s) => s.tipo !== 'lab' || true).length;
+    const total = CLASES.find((c) => c.n === p.clase)!.pasos.length;
     try {
       const r = await api.guardar({ ...p, totalClase: total, intento: p.intento ?? true });
       setPerfil({ usuario: r.usuario, progreso: r.progreso, insignias: r.insignias });
+      void vaciarPendientes();
       if (r.xpGanado > 0) { avisar(`+${r.xpGanado} XP`, 'xp'); if (p.puntaje === 100) confetti({ particleCount: 70, spread: 70, origin: { y: 0.75 } }); }
       for (const i of r.insigniasNuevas) { avisar(`Nueva insignia: ${INSIGNIAS[i]?.emoji ?? '🏅'} ${INSIGNIAS[i]?.nombre ?? i}`, 'insignia'); confetti({ particleCount: 160, spread: 100, origin: { y: 0.5 } }); }
-    } catch (e: any) { avisar(e.message || 'No se pudo guardar tu progreso.', 'error'); }
+    } catch (e: any) {
+      if (e?.status === 0) { encolar({ ...p, totalClase: total, intento: p.intento ?? true }); avisar('Sin conexión: guardaremos tu avance cuando vuelva internet.', 'error'); }
+      else avisar(e?.message || 'No se pudo guardar tu progreso.', 'error');
+    }
   }, [avisar]);
 
   const progreso = useMemo(() => Object.fromEntries((perfil?.progreso ?? []).map((p) => [p.actividad, p])), [perfil]);

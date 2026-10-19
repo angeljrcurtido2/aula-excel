@@ -173,8 +173,8 @@ function Ordena({ act, id, estado, setEstado, ev }: { act: Extract<Actividad, { 
               <GripVertical size={18} className="flex-none cursor-grab text-slate-400" />
               <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-excel text-xs font-bold text-white">{pos + 1}</span>
               <span className="flex-1 text-sm"><Inline t={act.items[idx]} /></span>
-              <button type="button" disabled={!!ev || pos === 0} onClick={() => mover(pos, pos - 1)} className="rounded-md p-1 text-slate-500 hover:bg-slate-100 disabled:opacity-30"><ArrowUp size={16} /></button>
-              <button type="button" disabled={!!ev || pos === orden.length - 1} onClick={() => mover(pos, pos + 1)} className="rounded-md p-1 text-slate-500 hover:bg-slate-100 disabled:opacity-30"><ArrowDown size={16} /></button>
+              <button type="button" disabled={!!ev || pos === 0} onClick={() => mover(pos, pos - 1)} className="rounded-md p-2 text-slate-500 hover:bg-slate-100 disabled:opacity-30"><ArrowUp size={18} /></button>
+              <button type="button" disabled={!!ev || pos === orden.length - 1} onClick={() => mover(pos, pos + 1)} className="rounded-md p-2 text-slate-500 hover:bg-slate-100 disabled:opacity-30"><ArrowDown size={18} /></button>
             </li>
           );
         })}

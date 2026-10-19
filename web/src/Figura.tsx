@@ -19,7 +19,7 @@ export function Marcador({ n, x, y, activo, onClick, estado }: { n: number | str
     <button
       type="button" onClick={onClick} aria-label={`Marca ${n}`}
       className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white text-[11px] font-extrabold text-white shadow-md transition ${fondo} ${activo ? 'z-20 scale-125 ring-4 ring-amber-300' : 'z-10 hover:scale-110'}`}
-      style={{ left: `${x}%`, top: `${y}%`, width: 24, height: 24 }}
+      style={{ left: `${x}%`, top: `${y}%`, width: 26, height: 26 }}
     >{n}</button>
   );
 }

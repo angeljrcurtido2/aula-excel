@@ -49,6 +49,17 @@ export function RetoView({ id, reto, inicial, completadaAntes, mejor, onResultad
         </details>
       )}
 
+      <details className="rounded-xl bg-white text-sm ring-1 ring-slate-200" open={id === 'c1-reto-1'}>
+        <summary className="cursor-pointer select-none px-4 py-2.5 font-bold text-navy">💡 Cómo usar la planilla</summary>
+        <ul className="list-disc space-y-1 px-8 pb-3 text-slate-700">
+          <li><b>Escribir:</b> toca o haz clic en una celda y escribe. <b>Enter</b> confirma y baja; <b>Tab</b> confirma y va a la derecha. En el celular, toca <b>dos veces</b> la celda para escribir.</li>
+          <li><b>Fórmulas:</b> empiezan con <code className="tec">=</code>. Mientras escribes una, puedes tocar otras celdas para agregarlas.</li>
+          <li><b>Copiar una fórmula:</b> selecciona la celda y arrastra el <b>cuadradito verde</b> de su esquina.</li>
+          <li><b>Formato:</b> selecciona celdas y usa los botones de la cinta (negrita, relleno, bordes, 000…). <b>Deshacer:</b> Ctrl+Z o el botón ↶.</li>
+          <li>Si la planilla es más ancha que la pantalla, <b>desliza hacia los lados</b>.</li>
+        </ul>
+      </details>
+
       <Planilla key={`${id}-${reinicio}`} def={reto.planilla} inicial={reinicio ? base : inicio} onCambio={(h) => { actual.current = h; }} />
 
       <div className="flex flex-wrap items-center gap-3">

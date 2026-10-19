@@ -13,7 +13,9 @@ export class ErrorApi extends Error {
 
 async function pedir<T>(ruta: string, opts: RequestInit = {}, extra: Record<string, string> = {}): Promise<T> {
   const t = getToken();
-  const r = await fetch(`${BASE}/api${ruta}`, { ...opts, headers: { 'Content-Type': 'application/json', ...(t ? { Authorization: `Bearer ${t}` } : {}), ...extra, ...(opts.headers as any) } });
+  let r: Response;
+  try { r = await fetch(`${BASE}/api${ruta}`, { ...opts, headers: { 'Content-Type': 'application/json', ...(t ? { Authorization: `Bearer ${t}` } : {}), ...extra, ...(opts.headers as any) } }); }
+  catch { throw new ErrorApi('Sin conexión con el servidor. Revisa tu internet e inténtalo de nuevo.', 0); }
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new ErrorApi(j.error || 'No pudimos conectar con el servidor.', r.status, j);
   return j as T;

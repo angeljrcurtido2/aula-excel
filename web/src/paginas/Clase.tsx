@@ -50,7 +50,7 @@ export function Clase() {
   return (
     <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
       <aside className="lg:sticky lg:top-20 lg:self-start">
-        <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-500 hover:text-slate-800"><ChevronLeft size={16} /> Inicio</Link>
+        <Link to="/" className="mb-2 inline-flex items-center gap-1 py-2 pr-3 text-sm font-semibold text-slate-500 hover:text-slate-800"><ChevronLeft size={16} /> Inicio</Link>
         <Tarjeta className="p-4">
           <div className="mb-3 flex items-center gap-3">
             <Anillo pct={r.pct} size={56} color={clase.color} />
