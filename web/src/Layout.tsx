@@ -21,7 +21,7 @@ export function Layout() {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-6xl px-4 py-6"><Outlet /></main>
+      <main className="mx-auto max-w-6xl px-4 pb-32 pt-6"><Outlet /></main>
       <div className="pointer-events-none fixed right-4 top-16 z-50 flex flex-col items-end gap-2">
         {avisos.map((a) => (
           <div key={a.id} className={`anim-pop rounded-2xl px-4 py-2.5 text-sm font-bold shadow-lg ${a.tipo === 'xp' ? 'bg-amber-400 text-amber-950' : a.tipo === 'insignia' ? 'bg-navy text-white' : a.tipo === 'error' ? 'bg-rose-600 text-white' : 'bg-slate-800 text-white'}`}>{a.tipo === 'xp' ? '✨ ' : ''}{a.texto}</div>
