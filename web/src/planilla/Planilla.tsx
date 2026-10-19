@@ -67,12 +67,12 @@ export function Planilla({ def, inicial, onCambio, titulo }: { def: PlanillaDef;
     });
   };
 
-  const iniciarEdicion = (texto: string, desde: 'celda' | 'barra' = 'celda') => {
+  const iniciarEdicion = (texto: string, desde: 'celda' | 'barra' = 'celda', seleccionarTodo = false) => {
     if (fijas.has(refActivo)) { setSacudir((n) => n + 1); return; }
     // flushSync: el cuadro de edición existe y tiene el foco ANTES de la siguiente tecla (si no, se pierden letras al escribir rápido)
     flushSync(() => setEdit({ texto, desde }));
     const inp = desde === 'celda' ? inputCelda.current : inputBarra.current;
-    if (inp) { inp.focus(); inp.setSelectionRange(texto.length, texto.length); }
+    if (inp) { inp.focus(); if (seleccionarTodo) inp.select(); else inp.setSelectionRange(texto.length, texto.length); }
   };
   const confirmar = (dr: number, dc: number) => {
     if (!edit) return;
@@ -260,7 +260,7 @@ export function Planilla({ def, inicial, onCambio, titulo }: { def: PlanillaDef;
           placeholder={fijas.has(refActivo) ? '(celda protegida)' : ''} />
       </div>
       <div className="xl-scroll" ref={contenedor}>
-        <div ref={grid} tabIndex={0} className={`xl-grid outline-none ${sacudir ? 'anim-sacudir' : ''}`} key={sacudir} style={{ width: W, height: H }} onKeyDown={onKeyGrid} onMouseDown={bajarCelda} onClick={(e) => { const p = previa.current; previa.current = null; if (p && !edit && !fijas.has(refDe(p.r, p.c)) && !(e.target as HTMLElement).closest('.xl-asa')) iniciarEdicion(hoja[refDe(p.r, p.c)]?.raw ?? ''); }}>
+        <div ref={grid} tabIndex={0} className={`xl-grid outline-none ${sacudir ? 'anim-sacudir' : ''}`} key={sacudir} style={{ width: W, height: H }} onKeyDown={onKeyGrid} onMouseDown={bajarCelda} onClick={(e) => { const p = previa.current; previa.current = null; if (p && !edit && !fijas.has(refDe(p.r, p.c)) && !(e.target as HTMLElement).closest('.xl-asa')) iniciarEdicion(hoja[refDe(p.r, p.c)]?.raw ?? '', 'celda', true); }}>
           <div className="xl-ch" style={{ left: 0, width: ENC_ANCHO, background: '#e6e6e6' }} />
           {anchos.map((w, i) => <div key={i} className={`xl-ch ${i >= rect.c1 && i <= rect.c2 ? 'sel' : ''}`} style={{ left: xs[i], width: w }}>{colLetra(i)}</div>)}
           {Array.from({ length: def.filas }, (_, r) => <div key={r} className={`xl-rh ${r >= rect.r1 && r <= rect.r2 ? 'sel' : ''}`} style={{ top: ENC_ALTO + r * ALTO, height: ALTO, lineHeight: `${ALTO}px` }}>{r + 1}</div>)}
