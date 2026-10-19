@@ -21,7 +21,7 @@ export type Actividad =
 
 // ---- Planilla / retos ----
 export type CeldaDef = { v?: string | number; fmt?: Formato; b?: boolean; fill?: string; color?: string; al?: 'l' | 'c' | 'r'; borde?: boolean; fijo?: boolean };
-export type PlanillaDef = { titulo: string; hoja: string; cols: number; filas: number; anchos?: number[]; celdas: Record<string, CeldaDef>; cinta?: boolean; soloLectura?: boolean };
+export type PlanillaDef = { titulo: string; hoja: string; cols: number; filas: number; anchos?: number[]; celdas: Record<string, CeldaDef>; cinta?: boolean; soloLectura?: boolean; /** al abrir, desplaza la planilla para que esta celda quede a la vista */ desplazarA?: string };
 
 export interface Ctx {
   valor: (ref: string) => Resultado;

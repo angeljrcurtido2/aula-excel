@@ -136,8 +136,10 @@ export const clase3: ClaseDef = {
     {
       id: 'c3-reto-4', tipo: 'reto', titulo: 'Reto: resumen por vendedor',
       reto: {
-        md: 'Con la tabla de ventas ya calculada, arma el resumen de la derecha (columnas J a L).\n\n- **K2:** ventas de Ana con [[=CONTAR.SI(B2:B17;J2)]].\n- **L2:** total vendido por Ana con [[=SUMAR.SI(B2:B17;J2;G2:G17)]].\n- Arrastra las dos fórmulas hasta la fila 4.\n\nOjo: las fórmulas deben copiarse bien, así que los rangos B2:B17 y G2:G17 conviene fijarlos con **$**.',
-        planilla: { titulo: 'Clase3_ventas', hoja: 'Ventas', cols: 12, filas: 17, anchos: [100, 80, 100, 80, 100, 100, 110, 100, 30, 90, 140, 120], celdas: planillaVentas('resumen'), cinta: true },
+        md: 'Con la tabla de ventas ya calculada, arma el resumen de la derecha (columnas J a L).\n\n- **K2:** ventas de Ana con [[=CONTAR.SI(B2:B17;J2)]].\n- **L2:** total vendido por Ana con [[=SUMAR.SI(B2:B17;J2;G2:G17)]].\n- Arrastra las dos fórmulas hasta la fila 4.\n\nOjo: las fórmulas deben copiarse bien, así que los rangos B2:B17 y G2:G17 conviene fijarlos con **$**.
+
+> ↔ El resumen está a la derecha de la tabla. La planilla se abre mostrando las columnas J a L; **desliza hacia la izquierda** para ver los datos.',
+        planilla: { titulo: 'Clase3_ventas', hoja: 'Ventas', cols: 12, filas: 17, anchos: [100, 80, 100, 80, 100, 100, 110, 100, 30, 90, 140, 120], celdas: planillaVentas('resumen'), cinta: true, desplazarA: 'J1' },
         checks: [
           chk('k', 'Cantidad de ventas por vendedor (K2:K4) con CONTAR.SI', (c) => ['Ana', 'Luis', 'María'].every((n, i) => esFormula(c, `K${i + 2}`) && esNum(c, `K${i + 2}`, resumenV(n).cant) && usa(c, `K${i + 2}`, /CONTAR\.SI/i)), 'Fija el rango con $: $B$2:$B$17.'),
           chk('l', 'Total vendido por vendedor (L2:L4) con SUMAR.SI', (c) => ['Ana', 'Luis', 'María'].every((n, i) => esFormula(c, `L${i + 2}`) && esNum(c, `L${i + 2}`, resumenV(n).total) && usa(c, `L${i + 2}`, /SUMAR\.SI/i)), 'SUMAR.SI(dónde busco; qué busco; qué sumo)'),

@@ -43,6 +43,17 @@ export function Planilla({ def, inicial, onCambio, titulo }: { def: PlanillaDef;
 
   useEffect(() => { onCambio?.(hoja); }, [hoja]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // si la planilla es más ancha que la pantalla: aviso para deslizar y, si el reto lo pide, se abre mostrando la zona de trabajo
+  const [desborda, setDesborda] = useState(false);
+  useEffect(() => {
+    const sc = contenedor.current; if (!sc) return;
+    const medir = () => setDesborda(sc.scrollWidth > sc.clientWidth + 4);
+    medir();
+    if (def.desplazarA) { const q = parseRango(def.desplazarA); if (q) sc.scrollLeft = Math.max(0, xs[q.c1] - ENC_ANCHO - 24); }
+    const ro = new ResizeObserver(medir); ro.observe(sc);
+    return () => ro.disconnect();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const aplicar = (cambia: (h: Hoja) => Hoja, guardarHistorial = true) => {
     setHoja((h) => { if (guardarHistorial) { historial.current = [...historial.current.slice(-49), h]; rehacer.current = []; } return cambia(h); });
   };
@@ -274,6 +285,7 @@ export function Planilla({ def, inicial, onCambio, titulo }: { def: PlanillaDef;
             onChange={(e) => setEdit({ texto: e.target.value, desde: 'celda' })} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); confirmar(1, 0); } else if (e.key === 'Tab') { e.preventDefault(); confirmar(0, e.shiftKey ? -1 : 1); } else if (e.key === 'Escape') cancelar(); }} />}
         </div>
       </div>
+      {desborda && <div className="bg-amber-50 px-3 py-1 text-center text-xs font-semibold text-amber-800">↔ La planilla es más ancha que la pantalla: desliza hacia los lados para ver todas las columnas</div>}
       <div className="xl-hojas"><span className="act">{def.hoja}</span></div>
       <div className="xl-pie"><span>{enEdicion ? (edit!.texto.startsWith('=') ? 'Introducir' : 'Modificar') : 'Listo'}</span><span>100%</span></div>
     </div>
