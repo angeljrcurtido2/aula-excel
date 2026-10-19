@@ -214,7 +214,7 @@ export function Planilla({ def, inicial, onCambio, titulo }: { def: PlanillaDef;
     if (esNumero && txt.length * 7.6 + 10 > anchos[c]) txt = '#'.repeat(Math.max(3, Math.floor(anchos[c] / 8)));
     const al = cd?.al ?? (esError(v) ? 'c' : typeof v === 'boolean' ? 'c' : esNumero ? 'r' : 'l');
     celdas.push(
-      <div key={ref} className={`xl-c ${cd?.borde ? 'borde' : ''}`}
+      <div key={ref} data-ref={ref} className={`xl-c ${cd?.borde ? 'borde' : ''}`}
         style={{ left: xs[c], top: ENC_ALTO + r * ALTO, width: anchos[c], height: ALTO, textAlign: al === 'r' ? 'right' : al === 'c' ? 'center' : 'left', fontWeight: cd?.b ? 700 : 400, background: cd?.fill ?? undefined, color: cd?.fill && /^#1f/i.test(cd.fill) ? '#fff' : esError(v) ? '#b00020' : undefined, lineHeight: `${ALTO - 3}px` }}>
         {txt}
       </div>,
