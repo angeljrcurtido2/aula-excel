@@ -28,7 +28,9 @@ const USERNAME = /^[a-z0-9._-]{3,30}$/;
 const app = express();
 app.set('trust proxy', 1);
 app.use(helmet({ contentSecurityPolicy: { useDefaults: true, directives: { 'worker-src': ["'self'", 'blob:'], 'img-src': ["'self'", 'data:'] } } }));
-app.use(cors({ origin: CORS_ORIGINS.split(',').map((s) => s.trim()).filter(Boolean) }));
+// Orígenes permitidos: los de CORS_ORIGINS y cualquier sitio de Netlify (la web se publica ahí; la API no usa cookies, la sesión va en un token).
+const ORIGENES = CORS_ORIGINS.split(',').map((x) => x.trim()).filter(Boolean);
+app.use(cors({ origin: (origin, cb) => cb(null, !origin || ORIGENES.includes(origin) || /^https:\/\/[a-z0-9-]+\.netlify\.app$/.test(origin)) }));
 app.use(express.json({ limit: '100kb' }));
 
 const wrap = (fn) => (req, res) => fn(req, res).catch((e) => { console.error('❌', req.method, req.path, e.message); res.status(500).json({ error: 'Error interno. Intenta de nuevo.' }); });
