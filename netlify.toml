@@ -1,0 +1,16 @@
+# Aula Excel en Netlify: solo la web (estática). La API (Node + MySQL) corre aparte y se indica en VITE_API_URL.
+[build]
+  base = "web"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Dirección pública de la API (túnel de Cloudflare hacia el servidor). Cámbiala aquí si cambia.
+  VITE_API_URL = "https://aula-api.sistemaprueba2026.online"
+
+# La app usa rutas como /clase/1/... : todas se sirven con index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

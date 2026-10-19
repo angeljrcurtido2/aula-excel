@@ -1,0 +1,14 @@
+import { createRequire } from 'node:module';
+import fs from 'node:fs';
+const require = createRequire('C:/SIS_VENTAS_NEXT/migracion_cliente/package.json');
+const { chromium } = require('playwright');
+const B = process.env.BASE || 'http://127.0.0.1:3010';
+const clave = fs.readFileSync('../server/.env', 'utf8').match(/^DOCENTE_KEY=(.+)$/m)[1].trim();
+const b = await chromium.launch(); const p = await (await b.newContext({ viewport: { width: 1360, height: 900 } })).newPage();
+const u = 'qa.doc' + Date.now().toString(36);
+await p.goto(B); await p.fill('input[placeholder="por ejemplo: ana.perez"]', u); await p.click('button:has-text("Continuar")'); await p.fill('input[placeholder="Ana Pérez"]', 'Alumno Doc'); await p.click('button:has-text("Crear mi usuario")'); await p.waitForSelector('text=Tus clases');
+await p.goto(B + '/docente'); await p.fill('input[type=password]', 'clave-mala'); await p.click('button:has-text("Entrar")'); await p.waitForSelector('text=incorrecta'); await p.screenshot({ path: 'shots/d_mala.png' });
+await p.fill('input[type=password]', clave); await p.click('button:has-text("Entrar")'); await p.waitForSelector('text=Panel del docente >> nth=0'); await p.waitForSelector('table');
+await p.click('tr:has-text("Alumno Doc")'); await p.waitForSelector('text=Clase 1 ·'); await p.screenshot({ path: 'shots/d_detalle.png' });
+console.log('docente ok');
+await b.close();

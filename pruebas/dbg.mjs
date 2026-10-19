@@ -1,0 +1,17 @@
+import { createRequire } from 'node:module';
+const require = createRequire('C:/SIS_VENTAS_NEXT/migracion_cliente/package.json');
+const { chromium } = require('playwright');
+const B = 'http://127.0.0.1:5174';
+const b = await chromium.launch(); const p = await (await b.newContext({ viewport: { width: 1360, height: 900 } })).newPage();
+p.on('pageerror', (e) => console.log('PAGEERROR', e.message)); p.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') console.log('CONSOLE', m.text().slice(0, 300)); });
+const u = 'qa.dbg' + Date.now().toString(36);
+await p.goto(B); await p.fill('input[placeholder="por ejemplo: ana.perez"]', u); await p.click('button:has-text("Continuar")'); await p.fill('input[placeholder="Ana Pérez"]', 'Dbg'); await p.click('button:has-text("Crear mi usuario")'); await p.waitForSelector('text=Tus clases');
+await p.goto(`${B}/clase/1/c1-reto-1`); await p.waitForSelector('.xl-grid'); await p.waitForTimeout(600);
+const g = await p.locator('.xl-grid').boundingBox();
+await p.mouse.click(g.x + 50, g.y + 22 + 10);
+console.log('activo tras clic:', await p.evaluate(() => document.activeElement?.className + ' | ' + document.activeElement?.tagName));
+await p.keyboard.press('Shift+M'); console.log('tras Shift+M:', await p.evaluate(() => document.activeElement?.className + ' | ' + (document.querySelector('.xl-edit')?.value ?? 'sin edit')));
+await p.keyboard.type('is gastos del mes'); await p.screenshot({ path: 'shots/dbg1.png' });
+await p.keyboard.press('Enter'); await p.waitForTimeout(200); await p.screenshot({ path: 'shots/dbg2.png' });
+console.log('A1', await p.locator('#nada').count(), (await p.locator('.xl-c').first().innerText()));
+await b.close();
