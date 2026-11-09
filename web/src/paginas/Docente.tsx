@@ -6,7 +6,7 @@ import { CLASES } from '../contenido';
 import { INSIGNIAS } from '../insignias';
 import { Boton, Chip, Tarjeta } from '../ui';
 
-interface Fila { username: string; nombre: string; xp: number; nivel: number; racha: number; ultimoAcceso: string | null; c1: number; c2: number; c3: number; promedio: number }
+interface Fila { username: string; nombre: string; xp: number; nivel: number; racha: number; ultimoAcceso: string | null; c1: number; c2: number; c3: number; c4: number; promedio: number }
 const KEY = 'aula-docente-clave';
 const leer = () => { try { return sessionStorage.getItem(KEY) ?? ''; } catch { return ''; } };
 
@@ -58,11 +58,11 @@ export function Docente() {
         <table className="w-full text-sm">
           <thead><tr className="border-b bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500"><th className="px-4 py-3">Alumno</th>{CLASES.map((c) => <th key={c.n} className="px-3 py-3">Clase {c.n}</th>)}<th className="px-3 py-3">Puntaje prom.</th><th className="px-3 py-3">XP</th><th className="px-3 py-3">Racha</th><th className="px-3 py-3">Último ingreso</th></tr></thead>
           <tbody>
-            {alumnos.length === 0 && <tr><td colSpan={8} className="px-4 py-8 text-center text-slate-500">Todavía no hay alumnos. Cuando se registren, aparecerán aquí.</td></tr>}
+            {alumnos.length === 0 && <tr><td colSpan={9} className="px-4 py-8 text-center text-slate-500">Todavía no hay alumnos. Cuando se registren, aparecerán aquí.</td></tr>}
             {alumnos.map((a) => (
               <tr key={a.username} onClick={() => ver(a.username)} className="cursor-pointer border-b last:border-0 hover:bg-excel-soft">
                 <td className="px-4 py-3"><div className="font-semibold">{a.nombre}</div><div className="text-xs text-slate-500">@{a.username}</div></td>
-                <td className="px-3 py-3">{barra(a.c1, tot[0], CLASES[0].color)}</td><td className="px-3 py-3">{barra(a.c2, tot[1], CLASES[1].color)}</td><td className="px-3 py-3">{barra(a.c3, tot[2], CLASES[2].color)}</td>
+                <td className="px-3 py-3">{barra(a.c1, tot[0], CLASES[0].color)}</td><td className="px-3 py-3">{barra(a.c2, tot[1], CLASES[1].color)}</td><td className="px-3 py-3">{barra(a.c3, tot[2], CLASES[2].color)}</td><td className="px-3 py-3">{barra(a.c4, tot[3], CLASES[3].color)}</td>
                 <td className="px-3 py-3 font-semibold">{a.promedio}%</td><td className="px-3 py-3">{a.xp} <span className="text-xs text-slate-500">(nivel {a.nivel})</span></td><td className="px-3 py-3">🔥 {a.racha}</td>
                 <td className="px-3 py-3 text-slate-500">{a.ultimoAcceso ? a.ultimoAcceso.slice(0, 16).replace('T', ' ') : '—'}</td>
               </tr>

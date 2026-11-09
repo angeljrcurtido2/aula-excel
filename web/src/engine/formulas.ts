@@ -10,6 +10,7 @@ const ERR_ES: Record<string, string> = { '#NAME?': '#¿NOMBRE?', '#DIV/0!': '#¡
 const FUNCIONES: Record<string, string> = {
   SUMA: 'SUM', PROMEDIO: 'AVERAGE', MAX: 'MAX', MIN: 'MIN', CONTAR: 'COUNT', CONTARA: 'COUNTA', SI: 'IF', Y: 'AND', O: 'OR',
   'CONTAR.SI': 'COUNTIF', 'SUMAR.SI': 'SUMIF', BUSCARV: 'VLOOKUP', REDONDEAR: 'ROUND', ABS: 'ABS', ENTERO: 'INT', RAIZ: 'SQRT',
+  EXTRAE: 'MID', ENCONTRAR: 'FIND', HALLAR: 'SEARCH', CONCATENAR: 'CONCATENATE', IZQUIERDA: 'LEFT', DERECHA: 'RIGHT', LARGO: 'LEN', MAYUSC: 'UPPER', MINUSC: 'LOWER', 'AÑO': 'YEAR', MES: 'MONTH', DIA: 'DAY', FECHA: 'DATE', SIFECHA: 'DATEDIF', HOY: 'TODAY',
 };
 
 export const colLetra = (i: number) => { let s = ''; i += 1; while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; };
@@ -111,6 +112,28 @@ export function evaluar(raws: Record<string, string>): Record<string, Resultado>
       if (!Array.isArray(filas) || typeof col !== 'number' || col < 1 || col > (filas[0]?.length ?? 0)) return new Error('#REF!');
       const fila = filas.find((f) => (ex ? norm(f[0]) === norm(buscado) : f[0] === buscado));
       return fila ? fila[col - 1] : new Error('#N/A');
+    });
+    // Fechas como número de serie (igual que Excel): días desde 30/12/1899.
+    const MS = 86400000, base = Date.UTC(1899, 11, 30);
+    const serie = (y: number, m: number, d: number) => Math.round((Date.UTC(y, m - 1, d) - base) / MS);
+    const aFecha = (n: any) => new Date(base + Math.floor(Number(n)) * MS);
+    p.setFunction('DATE', ([y, m, d]: any[]) => serie(Number(y), Number(m), Number(d)));
+    p.setFunction('TODAY', () => { const h = new Date(); return serie(h.getFullYear(), h.getMonth() + 1, h.getDate()); });
+    p.setFunction('YEAR', ([n]: any[]) => aFecha(n).getUTCFullYear());
+    p.setFunction('MONTH', ([n]: any[]) => aFecha(n).getUTCMonth() + 1);
+    p.setFunction('DAY', ([n]: any[]) => aFecha(n).getUTCDate());
+    p.setFunction('DATEDIF', ([ini, fin, u]: any[]) => {
+      const a = aFecha(ini), b = aFecha(fin);
+      if (b < a) return new Error('#NUM!');
+      let meses = (b.getUTCFullYear() - a.getUTCFullYear()) * 12 + b.getUTCMonth() - a.getUTCMonth();
+      if (b.getUTCDate() < a.getUTCDate()) meses--;
+      const unidad = String(u).toUpperCase();
+      if (unidad === 'Y') return Math.floor(meses / 12);
+      if (unidad === 'M') return meses;
+      if (unidad === 'D') return Math.floor(Number(fin)) - Math.floor(Number(ini));
+      if (unidad === 'YM') return meses % 12;
+      if (unidad === 'MD') { const m0 = new Date(Date.UTC(b.getUTCFullYear(), b.getUTCMonth() - (b.getUTCDate() < a.getUTCDate() ? 1 : 0), a.getUTCDate())); return Math.round((b.getTime() - m0.getTime()) / MS); }
+      return new Error('#NUM!');
     });
     const out = p.parse(traducir(raw));
     if (heredado && (out.error || out.result instanceof Error)) return heredado;

@@ -39,4 +39,4 @@ export type Paso =
   | { id: string; tipo: 'reto'; titulo: string; reto: RetoDef }
   | { id: string; tipo: 'lab'; titulo: string };
 
-export interface ClaseDef { n: 1 | 2 | 3; titulo: string; resumen: string; objetivos: string[]; color: string; pasos: Paso[] }
+export interface ClaseDef { n: 1 | 2 | 3 | 4; titulo: string; resumen: string; objetivos: string[]; color: string; pasos: Paso[] }

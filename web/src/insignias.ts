@@ -7,5 +7,6 @@ export const INSIGNIAS: Record<string, { nombre: string; desc: string; emoji: st
   racha7: { nombre: 'Imparable', desc: '7 días seguidos practicando.', emoji: '⚡' },
   clase1: { nombre: 'Clase 1 completa', desc: 'Terminaste Conociendo Excel.', emoji: '🥉' },
   clase2: { nombre: 'Clase 2 completa', desc: 'Terminaste Fórmulas y funciones.', emoji: '🥈' },
+  clase4: { nombre: 'Clase 4 completa', desc: 'Terminaste las Prácticas del Profe Beto.', emoji: '🏆' },
   clase3: { nombre: 'Clase 3 completa', desc: 'Terminaste Decisiones y análisis de datos.', emoji: '🥇' },
 };
