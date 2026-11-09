@@ -85,7 +85,7 @@ app.post('/api/progreso', auth, wrap(async (req, res) => {
   const puntaje = Math.max(0, Math.min(100, Math.round(Number(b.puntaje) || 0)));
   const completada = !!b.completada, intento = b.intento !== false;
   const totalClase = Math.min(60, Math.max(0, Number(b.totalClase) || 0));
-  if (!/^[a-z0-9-]{3,60}$/.test(actividad) || ![1, 2, 3, 4].includes(clase) || !TIPOS.has(tipo)) return res.status(400).json({ error: 'Datos de actividad inválidos.' });
+  if (!/^[a-z0-9-]{3,60}$/.test(actividad) || ![1, 2, 3, 4, 5, 6, 7].includes(clase) || !TIPOS.has(tipo)) return res.status(400).json({ error: 'Datos de actividad inválidos.' });
   const estado = b.estado && typeof b.estado === 'object' ? JSON.stringify(b.estado) : null;
   if (estado && estado.length > 20000) return res.status(413).json({ error: 'Respuesta demasiado grande.' });
 
@@ -141,9 +141,12 @@ app.get('/api/docente/resumen', docente, wrap(async (req, res) => {
       COALESCE(SUM(CASE WHEN p.clase = 2 AND p.completada THEN 1 END), 0) AS c2,
       COALESCE(SUM(CASE WHEN p.clase = 3 AND p.completada THEN 1 END), 0) AS c3,
       COALESCE(SUM(CASE WHEN p.clase = 4 AND p.completada THEN 1 END), 0) AS c4,
+      COALESCE(SUM(CASE WHEN p.clase = 5 AND p.completada THEN 1 END), 0) AS c5,
+      COALESCE(SUM(CASE WHEN p.clase = 6 AND p.completada THEN 1 END), 0) AS c6,
+      COALESCE(SUM(CASE WHEN p.clase = 7 AND p.completada THEN 1 END), 0) AS c7,
       COALESCE(ROUND(AVG(CASE WHEN p.completada THEN p.mejor_puntaje END)), 0) AS promedio
     FROM usuarios u LEFT JOIN progreso p ON p.usuario_id = u.id GROUP BY u.id ORDER BY u.xp DESC, u.username`);
-  res.json({ alumnos: filas.map((f) => ({ ...f, c1: Number(f.c1), c2: Number(f.c2), c3: Number(f.c3), c4: Number(f.c4), promedio: Number(f.promedio), nivel: nivelDe(f.xp) })) });
+  res.json({ alumnos: filas.map((f) => ({ ...f, c1: Number(f.c1), c2: Number(f.c2), c3: Number(f.c3), c4: Number(f.c4), c5: Number(f.c5), c6: Number(f.c6), c7: Number(f.c7), promedio: Number(f.promedio), nivel: nivelDe(f.xp) })) });
 }));
 app.get('/api/docente/usuario/:username', docente, wrap(async (req, res) => {
   const [[u]] = await pool.query('SELECT id FROM usuarios WHERE username = ?', [String(req.params.username).toLowerCase()]);

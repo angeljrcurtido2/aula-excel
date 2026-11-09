@@ -40,7 +40,7 @@ export function Clase() {
   const paso = clase.pasos[idx];
   const prog = progreso[paso.id];
   const r = resumenClase(clase.n, progreso);
-  const claseSig = CLASES.find((c) => c.n === clase.n + 1);
+  const claseSig = CLASES.find((c) => c.n === clase.n + 1 && (c.curso ?? 'excel') === (clase.curso ?? 'excel'));
   const irA = (i: number) => ir(`/clase/${clase.n}/${clase.pasos[i].id}`);
   const siguiente = () => (idx < clase.pasos.length - 1 ? irA(idx + 1) : claseSig ? ir(`/clase/${claseSig.n}/${claseSig.pasos[0].id}`) : ir('/'));
 
@@ -54,7 +54,7 @@ export function Clase() {
         <Tarjeta className="p-4">
           <div className="mb-3 flex items-center gap-3">
             <Anillo pct={r.pct} size={56} color={clase.color} />
-            <div><div className="text-xs font-bold uppercase tracking-wide" style={{ color: clase.color }}>Clase {clase.n}</div><div className="font-extrabold leading-tight">{clase.titulo}</div></div>
+            <div><div className="text-xs font-bold uppercase tracking-wide" style={{ color: clase.color }}>{clase.etiqueta ?? `Clase ${clase.n}`}</div><div className="font-extrabold leading-tight">{clase.titulo}</div></div>
           </div>
           <details className="lg:hidden">
             <summary className="cursor-pointer select-none rounded-lg bg-slate-100 px-3 py-2 text-sm font-semibold">Ver los {clase.pasos.length} pasos de la clase</summary>
@@ -111,7 +111,7 @@ export function Clase() {
 
         <div className="mt-5 flex items-center justify-between">
           <Boton variante="fantasma" disabled={idx === 0} onClick={() => irA(idx - 1)}><ArrowLeft size={16} /> Anterior</Boton>
-          <Boton onClick={siguiente}>{idx < clase.pasos.length - 1 ? 'Siguiente' : claseSig ? `Ir a la Clase ${claseSig.n}` : 'Terminar'} <ArrowRight size={16} /></Boton>
+          <Boton onClick={siguiente}>{idx < clase.pasos.length - 1 ? 'Siguiente' : claseSig ? `Ir a ${claseSig.etiqueta ?? `la Clase ${claseSig.n}`}` : 'Terminar'} <ArrowRight size={16} /></Boton>
         </div>
       </section>
     </div>

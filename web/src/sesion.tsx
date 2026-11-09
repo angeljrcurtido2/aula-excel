@@ -12,7 +12,7 @@ interface Ctx {
   ingresar: (username: string, nombre?: string) => Promise<{ nuevo: boolean }>;
   salir: () => void;
   /** Guarda el resultado de una actividad en el servidor y muestra XP e insignias nuevas. */
-  guardar: (p: { actividad: string; clase: 1 | 2 | 3 | 4; tipo: 'lectura' | 'actividad' | 'reto' | 'quiz'; puntaje: number; completada: boolean; estado?: any; intento?: boolean }) => Promise<void>;
+  guardar: (p: { actividad: string; clase: number; tipo: 'lectura' | 'actividad' | 'reto' | 'quiz'; puntaje: number; completada: boolean; estado?: any; intento?: boolean }) => Promise<void>;
   avisos: Aviso[];
   avisar: (texto: string, tipo?: Aviso['tipo']) => void;
 }

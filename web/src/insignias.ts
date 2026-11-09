@@ -8,5 +8,8 @@ export const INSIGNIAS: Record<string, { nombre: string; desc: string; emoji: st
   clase1: { nombre: 'Clase 1 completa', desc: 'Terminaste Conociendo Excel.', emoji: '🥉' },
   clase2: { nombre: 'Clase 2 completa', desc: 'Terminaste Fórmulas y funciones.', emoji: '🥈' },
   clase4: { nombre: 'Clase 4 completa', desc: 'Terminaste las Prácticas del Profe Beto.', emoji: '🏆' },
+  clase5: { nombre: 'PowerPoint 1 completa', desc: 'Terminaste Conociendo PowerPoint.', emoji: '📊' },
+  clase6: { nombre: 'PowerPoint 2 completa', desc: 'Terminaste Imágenes, formas, tablas y gráficos.', emoji: '🖼️' },
+  clase7: { nombre: 'PowerPoint 3 completa', desc: 'Terminaste Animaciones y presentación final.', emoji: '🎤' },
   clase3: { nombre: 'Clase 3 completa', desc: 'Terminaste Decisiones y análisis de datos.', emoji: '🥇' },
 };

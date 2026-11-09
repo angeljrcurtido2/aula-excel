@@ -31,8 +31,8 @@ export function Login() {
       <div className="relative hidden overflow-hidden bg-gradient-to-br from-excel via-excel-dark to-navy p-12 text-white lg:flex lg:flex-col lg:justify-between">
         <div className="flex items-center gap-3 text-2xl font-extrabold"><span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-2xl font-black text-excel shadow">X</span> Aula Excel</div>
         <div>
-          <h1 className="mb-4 text-5xl font-extrabold leading-tight">Aprende Excel<br />practicando de verdad.</h1>
-          <p className="max-w-md text-lg text-white/85">Tres clases interactivas con una planilla real donde escribes fórmulas, das formato y resuelves retos. Tu avance se guarda solo.</p>
+          <h1 className="mb-4 text-5xl font-extrabold leading-tight">Aprende Excel y PowerPoint<br />practicando de verdad.</h1>
+          <p className="max-w-md text-lg text-white/85">Clases interactivas de Excel y PowerPoint: planilla real para escribir fórmulas, retos con corrección y actividades. Tu avance se guarda solo.</p>
           <ul className="mt-8 space-y-3 text-white/90">
             <li className="flex items-center gap-3"><Sparkles className="text-amber-300" /> Retos con corrección inmediata y pistas</li>
             <li className="flex items-center gap-3"><Flame className="text-amber-300" /> Rachas diarias y puntos de experiencia</li>
@@ -41,7 +41,7 @@ export function Login() {
         </div>
         <div className="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-white/10" />
         <div className="pointer-events-none absolute -bottom-24 right-10 h-64 w-64 rounded-full bg-amber-300/20" />
-        <p className="text-sm text-white/60">Informática · Clases 1, 2 y 3</p>
+        <p className="text-sm text-white/60">Informática · Excel y PowerPoint</p>
       </div>
 
       <div className="flex items-center justify-center p-6">

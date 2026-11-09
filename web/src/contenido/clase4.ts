@@ -147,7 +147,7 @@ export const clase4: ClaseDef = {
   titulo: 'Prácticas del Profe Beto',
   resumen: 'Nueve prácticas para aplicar lo aprendido: IVA, porcentajes, referencias, facturas, comisiones, SUMAR.SI, texto, fechas y BUSCARV.',
   objetivos: ['Usar referencias relativas, absolutas y mixtas', 'Calcular IVA, porcentajes, incrementos y comisiones', 'Usar funciones de texto, fecha, SUMAR.SI y BUSCARV'],
-  color: '#c2410c',
+  color: '#0f766e',
   pasos: [
     {
       id: 'c4-lec-1', tipo: 'lectura', titulo: 'Cómo son estas prácticas',

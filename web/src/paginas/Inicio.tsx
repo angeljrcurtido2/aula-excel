@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Award, BookOpen, CheckCircle2, Flame, Lock, Play, Sparkles, Target } from 'lucide-react';
-import { CLASES } from '../contenido';
+import { CLASES, CURSOS } from '../contenido';
 import { INSIGNIAS } from '../insignias';
 import { resumenClase, siguientePaso } from '../progreso';
 import { useSesion } from '../sesion';
@@ -18,7 +18,7 @@ export function Inicio() {
     <div className="space-y-8">
       <section className="anim-subir overflow-hidden rounded-3xl bg-gradient-to-br from-navy to-excel p-6 text-white shadow-lg md:p-8">
         <p className="text-white/80">¡Hola, {u.nombre.split(' ')[0]}! 👋</p>
-        <h1 className="mt-1 text-3xl font-extrabold md:text-4xl">{hechas === 0 ? 'Empecemos con Excel' : hechas >= total ? '¡Terminaste todo el curso!' : 'Sigue practicando'}</h1>
+        <h1 className="mt-1 text-3xl font-extrabold md:text-4xl">{hechas === 0 ? 'Empecemos a aprender' : hechas >= total ? '¡Terminaste todo el curso!' : 'Sigue practicando'}</h1>
         <p className="mt-2 max-w-xl text-white/85">{hechas >= total ? 'Repasa cuando quieras: puedes repetir las actividades para mejorar tu puntaje.' : `Llevas ${hechas} de ${total} pasos completados.`}</p>
         {sig && (
           <Link to={`/clase/${sig.clase.n}/${sig.paso.id}`} className="mt-5 inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 font-bold text-excel shadow transition hover:scale-[1.02]">
@@ -38,10 +38,11 @@ export function Inicio() {
         ))}
       </section>
 
-      <section>
-        <h2 className="mb-3 text-xl font-extrabold">Tus clases</h2>
+      {CURSOS.map((curso) => (
+      <section key={curso.id}>
+        <h2 className="mb-3 text-xl font-extrabold">{curso.id === 'excel' ? '📗' : '📙'} Curso de {curso.nombre}</h2>
         <div className="grid gap-4 md:grid-cols-3">
-          {CLASES.map((c, i) => {
+          {curso.clases.map((c, i) => {
             const r = resumenClase(c.n, progreso);
             const siguiente = c.pasos.find((p) => !progreso[p.id]?.completada) ?? c.pasos[0];
             return (
@@ -50,7 +51,7 @@ export function Inicio() {
                   <div className="h-2" style={{ background: c.color }} />
                   <div className="p-5">
                     <div className="flex items-start justify-between gap-3">
-                      <div><div className="text-xs font-bold uppercase tracking-wide" style={{ color: c.color }}>Clase {c.n}</div><h3 className="mt-0.5 text-lg font-extrabold leading-snug">{c.titulo}</h3></div>
+                      <div><div className="text-xs font-bold uppercase tracking-wide" style={{ color: c.color }}>{c.etiqueta ?? `Clase ${c.n}`}</div><h3 className="mt-0.5 text-lg font-extrabold leading-snug">{c.titulo}</h3></div>
                       <Anillo pct={r.pct} color={c.color} />
                     </div>
                     <p className="mt-2 text-sm text-slate-600">{c.resumen}</p>
@@ -63,6 +64,7 @@ export function Inicio() {
           })}
         </div>
       </section>
+      ))}
 
       <section>
         <h2 className="mb-3 flex items-center gap-2 text-xl font-extrabold"><Award className="text-amber-500" /> Tus insignias <span className="text-sm font-semibold text-slate-500">({tiene.size}/{Object.keys(INSIGNIAS).length})</span></h2>
